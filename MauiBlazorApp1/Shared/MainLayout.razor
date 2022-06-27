@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        My Application
+        <MudSpacer/>
+        <MudDivider Vertical="true" FlexItem="true" />
+        <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Link="https://docs.microsoft.com/aspnet/" Target="_blank" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="@DrawerClipMode.Docked">
+@*        <MudDrawerHeader Dense="true">
+            <MudSpacer/>
+        </MudDrawerHeader>*@
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="ml-2 mt-8">
+            <Tabs>
+                @Body
+            </Tabs>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+

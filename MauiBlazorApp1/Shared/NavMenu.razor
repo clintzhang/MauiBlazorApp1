@@ -1,0 +1,10 @@
+﻿@using Index = MauiBlazorApp1.Pages.Index
+@using MauiBlazorApp1.Pages
+<MudNavMenu>
+    <MudNavLink Icon="@Icons.Filled.Home" Match="NavLinkMatch.All" OnClick="()=>NavClick(typeof(Index))">Home</MudNavLink>
+    <MudNavLink Icon="@Icons.Filled.Calculate" Match="NavLinkMatch.All" OnClick="()=>NavClick(typeof(Counter))">Counter</MudNavLink>
+    <MudNavLink Icon="@Icons.Filled.Search" Match="NavLinkMatch.All" OnClick="()=>NavClick(typeof(FetchData))">Fetch data</MudNavLink>
+    <MudDivider></MudDivider>
+</MudNavMenu>
+
+
