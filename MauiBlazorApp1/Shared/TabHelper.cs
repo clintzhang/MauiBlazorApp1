@@ -1,8 +1,5 @@
-﻿using MauiBlazorApp1.Pages;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Index = MauiBlazorApp1.Pages.Index;
-
 namespace MauiBlazorApp1.Shared;
 
 public class TabHelper {
@@ -11,7 +8,7 @@ public class TabHelper {
     public static List<TabView> TabViews = new();
     public static int TabIndex;
 
-    public static TabChanged TabChangedEvent;
+    public static TabChanged TabDataChangedEvent;
     public static TabChanged IndexChangedEvent;
     
     public static bool AddTabView(Type type, string title, string url) {
@@ -22,14 +19,15 @@ public class TabHelper {
             {
                 Title = title,
                 Content = GetRenderFragment(type),
-                Url = url
+                Url = url,
+                Id = Guid.NewGuid()
             };
             TabViews.Add(tab);
             isNew = true;
         }
 
         if (isNew) {
-            TabChangedEvent?.Invoke();
+            TabDataChangedEvent?.Invoke();
         }
 
         TabIndex = TabViews.IndexOf(tab);
@@ -47,9 +45,21 @@ public class TabHelper {
         void Fragment(RenderTreeBuilder renderFragmentBuilder)
         {
             renderFragmentBuilder.OpenComponent(0, type);
+           // renderFragmentBuilder.SetKey(Guid.NewGuid());
             renderFragmentBuilder.CloseComponent();
         }
 
         return Fragment;
+    }
+
+    public static int RemoveTabView(Guid id) {
+        var tabView = TabViews.FirstOrDefault(x => x.Id == id);
+        var index = TabViews.IndexOf(tabView);
+        if (tabView != null)
+        {
+            TabViews.Remove(tabView);
+        }
+
+        return index;
     }
 }

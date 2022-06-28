@@ -10,6 +10,7 @@ public partial class Tabs
     private int _index = -1;
 
     private bool _updatedIndex = false;
+    private bool _updatedContent = false;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
@@ -20,9 +21,9 @@ public partial class Tabs
     protected override void OnInitialized()
     {
         TabViews = TabHelper.TabViews;
-        TabHelper.TabChangedEvent = null;
+        TabHelper.TabDataChangedEvent = null;
         TabHelper.IndexChangedEvent = null;
-        TabHelper.TabChangedEvent += TabChangedEvent;
+        TabHelper.TabDataChangedEvent += TabDataChangedEvent;
         TabHelper.IndexChangedEvent += IndexChangedEvent;
     }
 
@@ -41,7 +42,7 @@ public partial class Tabs
             StateHasChanged();
         }
     }
-    private void TabChangedEvent()
+    private void TabDataChangedEvent()
     {
         StateHasChanged();
     }
@@ -52,10 +53,17 @@ public partial class Tabs
 
         if (_updatedIndex)
         {
-            //_mudTabs.ActivatePanel(_index);
             _index = TabHelper.TabIndex;
+            _mudTabs.ActivatePanel(TabViews[_index].Id);
             StateHasChanged();
             _updatedIndex = false;
+            return;
+        }
+
+        if (_updatedContent) {
+            //_mudTabs.ActivatePanel(TabViews[_index].Id);
+            //StateHasChanged();
+            _updatedContent = false;
             return;
         }
 
@@ -73,18 +81,23 @@ public partial class Tabs
 
     private void ActiveTabChanged(object id)
     {
-        // _index = _mudTabs.ActivePanelIndex;
+        //_index = _mudTabs.ActivePanelIndex;
         //ChildContent = TabViews[_mudTabs.ActivePanelIndex].Content;
         //StateHasChanged();
     }
 
-    private void CloseTabCallback(MudTabPanel panel)
-    {
-        var tabView = TabViews.FirstOrDefault(x => x.Title is { } && x.Title == (string)panel.ID);
-        if (tabView != null)
-        {
-            TabViews.Remove(tabView);
-            StateHasChanged();
+    private async void CloseTabCallback(MudTabPanel panel) {
+        var index = TabHelper.RemoveTabView((Guid)panel.ID);
+        if (index == _index && TabViews.Count > index) {
+            //_updatedContent = true;
+            _mudTabs.ActivatePanel(TabViews[index].Id);
+            await panel.DisposeAsync();
+            //StateHasChanged();
         }
+    }
+
+    private void ActivePanelIndexChanged() {
+        Console.WriteLine($"index={_index}");
+        Console.WriteLine($"activeIndex={_mudTabs.ActivePanelIndex}");
     }
 }

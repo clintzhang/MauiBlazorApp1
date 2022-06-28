@@ -1,14 +1,14 @@
-﻿<div>
-    <MudDynamicTabs Elevation="1" Rounded="true" PanelClass="pa-6" KeepPanelsAlive="true" @ref="_mudTabs" 
-                    CloseTab="@(CloseTabCallback)" @bind-ActivePanelIndex="_index">
-        <ChildContent>
-            @foreach (var item in TabViews) {
-                <MudTabPanel @key="@item.Title" Text="@item.Title" ID="@item.Title" OnClick="()=>ActiveTabChanged(item.Title)">
-                    <MudText>@item.Title</MudText>
-                    @item.Content
-                </MudTabPanel>
-            }
-        </ChildContent>
+﻿
+<div>
+    <MudDynamicTabs Elevation="1" Rounded="true" PanelClass="pa-6" KeepPanelsAlive="true" @ref="_mudTabs"
+                    CloseTab="@(CloseTabCallback)" @bind-ActivePanelIndex="_index" HideSlider="true">
+        @foreach (var item in TabViews)
+        {
+            <MudTabPanel @key="@item.Title" Text="@item.Title" ID="@item.Id" OnClick="()=>ActiveTabChanged(item.Title)">
+                <MudText>@item.Title</MudText>
+                @item.Content
+            </MudTabPanel>
+        }
     </MudDynamicTabs>
 </div>
 
